@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import CalcForm from './components/CalcForm';
+import CalcForm from './components/CalcForm/CalcForm';
+import ResultPanel from './components/ResultPanel/ResultPanel'
 import './App.less'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [formData, setFormData] = useState(null)
 
   return (
     <>
       <div className="container">
         <h1 className="header">碳循环计算器</h1>
-        <CalcForm />
+        <CalcForm onSubmit={setFormData}/>
+        <ResultPanel data={formData}/>
       </div>
     </>
   )
