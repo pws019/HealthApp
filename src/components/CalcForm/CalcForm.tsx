@@ -24,15 +24,6 @@ export default function CalcForm(props) {
   return (
     <div className={`${prefixCls}`}>
       <Form
-        initialValues={{
-          weight: 78,
-          age: 29,
-          height: 170,
-          sex: 'male',
-          playRatio: 1.0,
-          lackEnergy: 0.2,
-          dateType: 'A'
-        }}
         layout='horizontal' 
         mode='card'
         onFinish={onSubmit}
