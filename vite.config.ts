@@ -9,5 +9,6 @@ export default defineConfig({
       charset: false,
       additionalData: '@import "./src/assets/style/global.less";',
     },
-  }
+  },
+  base: '/HealthApp/'
 })
