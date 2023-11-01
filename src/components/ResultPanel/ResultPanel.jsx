@@ -36,7 +36,7 @@ export default function ResultPanel(props) {
       <Card title='计算结果'>
         <div className={`${prefixCls}-row`}>
           基础代谢热量(大卡): {baseMetabolism} <br/>
-          运行系数:{playRatio}
+          运动系数:{playRatio}
         </div>
         <div className={`${prefixCls}-row`}>
           日消耗热量(大卡): {dayConsume.toFixed(2)}
