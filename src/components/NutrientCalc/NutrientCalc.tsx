@@ -67,6 +67,9 @@ export default function NutrientCalc(props) {
         }
       >
         <Form.Header>营养表</Form.Header>
+        <Form.Item name="foodName" label='食物名称'>
+          <Input placeholder='备注该食物名称用' />
+        </Form.Item>
         <Form.Item name="groupUnit" label='每x克' rules={[{ required: true }]}>
           <Input type="number" max={1000} placeholder='请输入单位(例如:100g)' />
         </Form.Item>
