@@ -21,12 +21,29 @@ import './NutrientCalc.less'
 const prefixCls = 'nutrient-calc';
 export default function NutrientCalc(props) {
 
+  const CalcType = {
+    FoodToNur: 'FoodToNur',
+    NurToFood: 'NurToFood',
+  }
+
+  const calcMethod = {
+    [CalcType.FoodToNur]: (values) => {
+      setNeedFood(values.needCount);
+      setOc(values.c * values.needCount / values.groupUnit);
+      setOP(values.p * values.needCount / values.groupUnit);
+      setOF(values.f * values.needCount / values.groupUnit);
+    },
+    [CalcType.NurToFood]: (values) => {
+      const needWeight = values.groupUnit * values.needCount / values[values.needType];
+      setNeedFood(needWeight);
+      setOc(needWeight * values.c / values.groupUnit);
+      setOP(needWeight * values.p / values.groupUnit);
+      setOF(needWeight * values.f / values.groupUnit);
+    }
+  }
+
   const onSubmit = (values) => {
-    const needWeight = values.groupUnit * values.needCount / values[values.needType];
-    setNeedFood(needWeight);
-    setOc(needWeight * values.c / 100);
-    setOP(needWeight * values.p / 100);
-    setOF(needWeight * values.f / 100);
+    calcMethod[values.calcType](values);
   }
 
   const resetForm = () => {
@@ -37,7 +54,9 @@ export default function NutrientCalc(props) {
   const [oC, setOc] = useState(0);
   const [oP, setOP] = useState(0);
   const [oF, setOF] = useState(0);
+  const [calcType, setCalcType] = useState(CalcType.NurToFood);
   const formRef = useRef({});
+  
 
 
   return (
@@ -49,7 +68,7 @@ export default function NutrientCalc(props) {
         onFinish={onSubmit}
         initialValues={{
           groupUnit: 100,
-
+          calcType: CalcType.NurToFood,
         }}
         footer={
           <Grid  columns={2} gap={16}>
@@ -83,8 +102,18 @@ export default function NutrientCalc(props) {
           <Input type="number" max={1000} placeholder='请输入脂肪含量' />
         </Form.Item>
 
-        <Form.Header>要吃够的元素</Form.Header>
-        <Form.Item name="needType" label='元素类型' layout='vertical' rules={[{ required: true, message: '请选择元素类型' }]}>
+        <Form.Header>计算类型</Form.Header>
+        <Form.Item name="calcType" label='计算类型' layout='vertical' rules={[{ required: true, message: '请选择计算类型' }]}>
+          <Radio.Group onChange={(val) => setCalcType(val)}>
+            <Space direction='vertical'>
+              <Radio value={CalcType.NurToFood}>根据需要营养算吃的量</Radio>
+              <Radio value={CalcType.FoodToNur}>根据预计吃的量算营养</Radio>
+            </Space>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Header>计算信息</Form.Header>
+        {CalcType.NurToFood === calcType ? <Form.Item name="needType" label='元素类型' layout='vertical' rules={[{ required: true, message: '请选择元素类型' }]}>
           <Radio.Group>
             <Space direction='vertical'>
               <Radio value={"c"}>碳水</Radio>
@@ -92,8 +121,8 @@ export default function NutrientCalc(props) {
               <Radio value={"f"}>脂肪</Radio>
             </Space>
           </Radio.Group>
-        </Form.Item>
-        <Form.Item name="needCount" label='要吃够的分量' rules={[{ required: true }]}>
+        </Form.Item> : null }
+        <Form.Item name="needCount" label='要吃的分量' rules={[{ required: true }]}>
           <Input type="number" max={1000} placeholder='请输入要吃够的分量(g)' />
         </Form.Item>
       </Form>
